@@ -1,11 +1,11 @@
-index.html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mừng Thôi Nôi Bé Bông</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background: #ffeef2; min-height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; display: none; }
@@ -62,7 +62,7 @@ index.html<!DOCTYPE html>
 
     <div class="main-card">
         <div class="hero-section">
-            <img src="https://i.postimg.cc/q7S9H4v8/1000083340.jpg" class="main-img" alt="Bé Bông">
+            <img src="https://picsum.photos/id/1067/600/400" class="main-img" alt="Bé Bông">
         </div>
         
         <div class="baby-name">Đinh Ngọc Minh Châu</div>
@@ -75,17 +75,17 @@ index.html<!DOCTYPE html>
             <div class="divider"></div>
             <div class="location-title">📍 TỔ CHỨC TẠI TƯ GIA</div>
             <div class="location-detail">Tổ 1 Bồng Lai, Hiệp Thạnh, Đức Trọng, Lâm Đồng</div>
-            <a href="https://www.google.com/maps/search/?api=1&query=Bồng+Lai+Hiệp+Thạnh+Đức+Trọng+Lâm+Đồng5" target="_blank" class="map-button">🗺️ Chỉ đường qua Maps</a>
+            <a href="https://maps.google.com" target="_blank" class="map-button">🗺️ Chỉ đường qua Maps</a>
         </div>
 
         <div class="album-section">
             <div class="album-title">📸 Album ảnh của con</div>
             <div class="album-grid">
                 <div class="album-card">
-                    <img src="https://i.postimg.cc/hGv4mG0b/1000083336.jpg" alt="Bé Bông ngủ ngon">
+                    <img src="https://picsum.photos/id/823/300/300" alt="Bé Bông ngủ ngon">
                 </div>
                 <div class="album-card">
-                    <img src="https://i.postimg.cc/gJb56v4C/1000092229.jpg" alt="Bé Bông cười tươi">
+                    <img src="https://picsum.photos/id/64/300/300" alt="Bé Bông cười tươi">
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@ index.html<!DOCTYPE html>
     <div id="music-toggle" class="spin" onclick="controlMusic()">🎵</div>
 
     <audio id="birthday-song" loop>
-        <source src="https://assets.mixkit.co/active_storage/sfx/123/123-84.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -108,7 +108,7 @@ index.html<!DOCTYPE html>
                 document.getElementById('envelope-screen').style.display = 'none';
                 snow.style.display = 'block';
                 musicIcon.style.display = 'flex';
-                track.play().catch(err => console.log("Chờ tương tác"));
+                track.play().catch(err => console.log("Chờ bấm"));
             }, 600);
         }
 
