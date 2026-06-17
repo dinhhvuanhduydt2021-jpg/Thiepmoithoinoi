@@ -6,161 +6,181 @@
     <title>Mừng Thôi Nôi Bé Bông</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #ffeef2; min-height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        body { background: #fff0f3; min-height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; }
         
-        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; display: none; }
+        /* Hiệu ứng hạt lấp lánh (Sparkles) giống LoveCard */
+        #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 20; display: none; }
 
-        /* MÀN HÌNH BAO THƯ BÍ MẬT */
-        #envelope-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ffafbd, #ffc3a0); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
-        .envelope { width: 140px; height: 140px; background: #ffffff; border-radius: 30px; display: flex; justify-content: center; align-items: center; box-shadow: 0 15px 35px rgba(216, 27, 96, 0.25); cursor: pointer; animation: float 2s ease-in-out infinite; border: 4px solid #fff; }
-        .envelope-icon { font-size: 65px; transform: translateY(2px); }
-        .hint-text { margin-top: 25px; color: #fff; font-weight: 600; font-size: 15px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.1); animation: blink 1.5s infinite; }
-        
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        @keyframes blink { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        /* MÀN HÌNH MỞ ĐẦU: PHONG THƯ HOÀNG GIA */
+        #envelope-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 1s cubic-bezier(0.77, 0, 0.175, 1); }
+        .envelope-wrapper { position: relative; cursor: pointer; animation: float 2.5s ease-in-out infinite; }
+        .envelope { width: 150px; height: 150px; background: #ffffff; border-radius: 35px; display: flex; justify-content: center; align-items: center; box-shadow: 0 20px 40px rgba(216, 27, 96, 0.2); border: 4px solid #fff; }
+        .heart-badge { position: absolute; font-size: 40px; top: 50%; left: 50%; transform: translate(-50%, -40%); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
+        .envelope-text { margin-top: 30px; color: #ffffff; font-weight: bold; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0,0,0,0.1); animation: pulse 1.5s infinite; }
 
-        /* GIAO DIỆN CHÍNH */
-        .main-card { width: 100%; max-width: 430px; background: #fff5f7; min-height: 100vh; height: 100vh; overflow-y: auto; position: relative; z-index: 10; box-shadow: 0 0 30px rgba(0,0,0,0.08); padding-bottom: 40px; display: flex; flex-direction: column; align-items: center; border-left: 1px solid #ffe4e8; border-right: 1px solid #ffe4e8; }
-        
-        .hero-section { width: 100%; position: relative; padding: 20px 20px 0 20px; }
-        .main-img { width: 100%; height: 320px; object-fit: cover; border-radius: 24px; border: 6px solid #ffffff; box-shadow: 0 8px 20px rgba(255, 92, 138, 0.15); }
-        
-        .baby-name { font-size: 24px; color: #d81b60; font-weight: 800; margin-top: 20px; letter-spacing: 0.5px; text-transform: uppercase; }
-        .sub-title { font-size: 14px; color: #888; font-style: italic; margin-bottom: 15px; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(2deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
 
-        .info-container { width: calc(100% - 40px); background: #ffffff; border-radius: 24px; padding: 25px 20px; box-shadow: 0 10px 25px rgba(255, 92, 138, 0.05); border: 1px dashed #ffb6c1; margin-bottom: 20px; text-align: center; }
-        .info-header { font-size: 14px; color: #ff5c8a; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; }
-        .time-highlight { font-size: 36px; color: #e91e63; font-weight: 900; letter-spacing: -0.5px; }
-        .date-highlight { font-size: 16px; color: #444; font-weight: 600; margin-top: 2px; margin-bottom: 15px; }
-        .divider { border: none; border-top: 1px solid #ffe8ec; margin: 15px 0; }
-        .location-title { font-size: 13px; color: #999; font-weight: 700; letter-spacing: 1px; }
-        .location-detail { font-size: 15px; color: #333; font-weight: 700; margin-top: 5px; line-height: 1.5; }
+        /* CONTAINER CHÍNH CHUẨN PREMIUM */
+        .main-card { width: 100%; max-width: 430px; background: #ffffff; height: 100vh; overflow-y: auto; position: relative; z-index: 10; box-shadow: 0 0 40px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
         
-        .map-button { display: inline-block; background: #2196f3; color: #fff; text-decoration: none; padding: 12px 35px; border-radius: 50px; font-weight: 700; font-size: 13px; box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3); margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .album-section { width: calc(100% - 40px); margin-top: 10px; }
-        .album-title { font-size: 13px; color: #ff5c8a; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; text-align: left; padding-left: 5px; }
-        .album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .album-card { background: #fff; padding: 5px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .album-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; }
+        /* Khung hoa văn viền góc đặc trưng */
+        .card-border-decor { position: absolute; width: 100%; height: 100%; pointer-events: none; border: 15px solid transparent; border-image: url('https://i.postimg.cc/0jXyZp3k/border.png') 30 round; opacity: 0.3; z-index: 11; }
 
-        #music-toggle { position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px; background: #ff5c8a; color: #fff; border-radius: 50%; display: none; justify-content: center; align-items: center; z-index: 50; box-shadow: 0 5px 15px rgba(255,92,138,0.4); cursor: pointer; font-size: 18px; }
-        .spin { animation: rotation 4s linear infinite; }
-        @keyframes rotation { 100% { transform: rotate(360deg); } }
+        /* Phần Header Ảnh Bé */
+        .hero-holder { width: 100%; padding: 25px 25px 0 25px; position: relative; }
+        .hero-img { width: 100%; height: 340px; object-fit: cover; border-radius: 30px; border: 8px solid #fff; box-shadow: 0 10px 30px rgba(255, 92, 138, 0.12); }
+        
+        .baby-title { font-size: 26px; color: #c2185b; font-weight: 800; margin-top: 25px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .baby-subtitle { font-size: 14px; color: #888; font-style: italic; margin-bottom: 20px; }
+
+        /* Hộp Thông Tin Tiệc Sang Trọng */
+        .luxury-info-box { width: calc(100% - 50px); background: #fffafb; border-radius: 28px; padding: 30px 20px; box-shadow: 0 10px 35px rgba(255, 92, 138, 0.04); border: 1.5px dashed #ffb6c1; margin-bottom: 25px; text-align: center; position: relative; }
+        .invitation-line { font-size: 14px; color: #ff5c8a; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; }
+        .time-big { font-size: 38px; color: #d81b60; font-weight: 900; }
+        .date-full { font-size: 16px; color: #333; font-weight: 600; margin-top: 5px; margin-bottom: 20px; }
+        .line-deco { width: 60px; height: 2px; background: #ffe4e8; margin: 0 auto 20px; }
+        .venue-title { font-size: 12px; color: #999; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+        .venue-detail { font-size: 16px; color: #222; font-weight: 700; margin-top: 6px; line-height: 1.5; }
+        
+        .maps-btn { display: inline-block; background: #2196f3; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 50px; font-weight: 700; font-size: 13px; box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3); margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        
+        /* Album Ảnh Chân Trang */
+        .gallery-wrapper { width: calc(100% - 50px); margin-top: 10px; }
+        .gallery-title { font-size: 14px; color: #ff5c8a; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; text-align: left; padding-left: 5px; }
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .gallery-item { background: #fff; padding: 6px; border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #ffeef1; }
+        .gallery-item img { width: 100%; height: 145px; object-fit: cover; border-radius: 14px; }
+
+        /* Nút Điều Khiển Âm Nhạc Tròn */
+        #music-controller { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #ff5c8a; color: #fff; border-radius: 50%; display: none; justify-content: center; align-items: center; z-index: 50; box-shadow: 0 6px 20px rgba(255,92,138,0.35); cursor: pointer; font-size: 20px; }
+        .rotate-effect { animation: spinMe 4s linear infinite; }
+        @keyframes spinMe { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="envelope-screen" onclick="unwrapCard()">
-        <div class="envelope">
-            <span class="envelope-icon">💌</span>
+    <div id="envelope-screen" onclick="openLuxuryCard()">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <span style="font-size: 60px; opacity: 0.15;">✉</span>
+            </div>
+            <div class="heart-badge">💖</div>
         </div>
-        <div class="hint-text">Chạm để mở thiệp mời</div>
+        <div class="envelope-text">Chạm để nhận thiệp</div>
     </div>
 
-    <canvas id="snow-canvas"></canvas>
+    <canvas id="sparkle-canvas"></canvas>
 
     <div class="main-card">
-        <div class="hero-section">
-            <img src="https://picsum.photos/id/1067/600/400" class="main-img" alt="Bé Bông">
+        <div class="card-border-decor"></div>
+
+        <div class="hero-holder">
+            <img src="https://picsum.photos/id/1067/600/400" class="hero-img" alt="Bé Bông">
         </div>
         
-        <div class="baby-name">Đinh Ngọc Minh Châu</div>
-        <div class="sub-title">(Bé Bông Tròn 1 Tuổi)</div>
+        <div class="baby-title">Đinh Ngọc Minh Châu</div>
+        <div class="baby-subtitle">(Bé Bông Tròn 1 Tuổi)</div>
 
-        <div class="info-container">
-            <div class="info-header">✨ Trân trọng kính mời ✨</div>
-            <div class="time-highlight">11:30 Trưa</div>
-            <div class="date-highlight">Chủ Nhật, Ngày 28 Tháng 06 Năm 2026</div>
-            <div class="divider"></div>
-            <div class="location-title">📍 TỔ CHỨC TẠI TƯ GIA</div>
-            <div class="location-detail">Tổ 1 Bồng Lai, Hiệp Thạnh, Đức Trọng, Lâm Đồng</div>
-            <a href="https://maps.google.com" target="_blank" class="map-button">🗺️ Chỉ đường qua Maps</a>
+        <div class="luxury-info-box">
+            <div class="invitation-line">✨ Trân trọng kính mời ✨</div>
+            <div class="time-big">11:30 Trưa</div>
+            <div class="date-full">Chủ Nhật, Ngày 28 Tháng 06 Năm 2026</div>
+            <div class="line-deco"></div>
+            <div class="venue-title">📍 TỔ CHỨC TẠI TƯ GIA</div>
+            <div class="venue-detail">Tổ 1 Bồng Lai, Hiệp Thạnh, Đức Trọng, Lâm Đồng</div>
+            <a href="http://googleusercontent.com/maps.google.com/6" target="_blank" class="maps-btn">🗺️ Chỉ đường qua Google Maps</a>
         </div>
 
-        <div class="album-section">
-            <div class="album-title">📸 Album ảnh của con</div>
-            <div class="album-grid">
-                <div class="album-card">
+        <div class="gallery-wrapper">
+            <div class="gallery-title">📸 Nhật ký lớn khôn của con</div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
                     <img src="https://picsum.photos/id/823/300/300" alt="Bé Bông ngủ ngon">
                 </div>
-                <div class="album-card">
+                <div class="gallery-item">
                     <img src="https://picsum.photos/id/64/300/300" alt="Bé Bông cười tươi">
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="music-toggle" class="spin" onclick="controlMusic()">🎵</div>
+    <div id="music-controller" class="rotate-effect" onclick="handleMusic()">🎵</div>
 
-    <audio id="birthday-song" loop>
+    <audio id="bg-audio" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        var track = document.getElementById('birthday-song');
-        var musicIcon = document.getElementById('music-toggle');
-        var snow = document.getElementById('snow-canvas');
+        var myTrack = document.getElementById('bg-audio');
+        var mIcon = document.getElementById('music-controller');
+        var canvas = document.getElementById('sparkle-canvas');
 
-        function unwrapCard() {
-            document.getElementById('envelope-screen').style.transform = 'translateY(-100%)';
+        function openLuxuryCard() {
+            // Hiệu ứng biến mất mượt mà của bao thư
+            document.getElementById('envelope-screen').style.opacity = '0';
+            document.getElementById('envelope-screen').style.transform = 'scale(0.9) translateY(-30px)';
+            
             setTimeout(() => {
                 document.getElementById('envelope-screen').style.display = 'none';
-                snow.style.display = 'block';
-                musicIcon.style.display = 'flex';
-                track.play().catch(err => console.log("Chờ bấm"));
-            }, 600);
+                canvas.style.display = 'block';
+                mIcon.style.display = 'flex';
+                myTrack.play().catch(e => console.log("Hệ thống kích hoạt âm thanh"));
+            }, 800);
         }
 
-        function controlMusic() {
-            if (track.paused) {
-                track.play();
-                musicIcon.classList.add('spin');
+        function handleMusic() {
+            if (myTrack.paused) {
+                myTrack.play();
+                mIcon.classList.add('rotate-effect');
             } else {
-                track.pause();
-                musicIcon.classList.remove('spin');
+                myTrack.pause();
+                mIcon.classList.remove('rotate-effect');
             }
         }
 
-        const ctx = snow.getContext('2d');
-        let w, h, flakes = [];
+        // Tạo hiệu ứng hạt lấp lánh (Sparkle particles) nhẹ nhàng
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
 
-        function setSize() {
-            w = snow.width = window.innerWidth;
-            h = snow.height = window.innerHeight;
+        function initSize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', setSize);
-        setSize();
+        window.addEventListener('resize', initSize);
+        initSize();
 
-        class Flake {
-            constructor() { this.init(); }
-            init() {
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
                 this.x = Math.random() * w;
-                this.y = Math.random() * -h;
-                this.r = Math.random() * 2.5 + 1.5;
-                this.v = Math.random() * 0.8 + 0.4;
-                this.op = Math.random() * 0.6 + 0.2;
+                this.y = Math.random() * h + h;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = Math.random() * -0.7 - 0.3;
+                this.alpha = Math.random() * 0.6 + 0.2;
+                this.fade = Math.random() * 0.005 + 0.002;
             }
-            move() {
-                this.y += this.v;
-                if (this.y > h) this.init();
+            update() {
+                this.y += this.speedY;
+                this.alpha -= this.fade;
+                if (this.y < 0 || this.alpha <= 0) this.reset();
             }
-            render() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.op})`;
+            draw() {
+                ctx.fillStyle = `rgba(255, 182, 193, ${this.alpha})`;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < 70; i++) flakes.push(new Flake());
+        for (let i = 0; i < 40; i++) particles.push(new Particle());
 
-        function run() {
+        function animate() {
             ctx.clearRect(0, 0, w, h);
-            flakes.forEach(f => { f.move(); f.render(); });
-            requestAnimationFrame(run);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
         }
-        run();
+        animate();
     </script>
 </body>
 </html>
